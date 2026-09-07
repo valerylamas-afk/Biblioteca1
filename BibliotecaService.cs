@@ -74,9 +74,18 @@ class BibliotecaService
 
         if (usuario == null)
             throw new Exception("El usuario no existe.");
+        
+        var prestamoActivo = prestamos.FirstOrDefault(
+            p => p.CodigoLibro == codigoLibro &&
+                p.IdUsuario == idUsuario &&
+                p.FechaDevolucion == null
+        );
+        
 
+        if (prestamoActivo != null)
+          throw new Exception("El usuario ya tiene este libro prestado.");
         if (!libro.Disponible)
-            throw new Exception("El libro no está disponible.");
+         throw new Exception("El libro no está disponible.");
 
         libro.Disponible = false;
 
@@ -90,6 +99,7 @@ class BibliotecaService
         );
 
         Console.WriteLine("Préstamo registrado correctamente.");
+
     }
 
     public void RegistrarDevolucion(int codigoLibro, int idUsuario)
